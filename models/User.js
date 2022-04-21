@@ -3,23 +3,27 @@ const friendSchema = require("./Friend");
 const thoughtSchema = require("./Thought");
 
 // Schema to create User model
-const studentSchema = new Schema({
-  first: {
+const userSchema = new Schema({
+  username: {
     type: String,
+    unique: true,
     required: true,
-    max_length: 50,
+    trim: true,
   },
-  last: {
+  email: {
     type: String,
     required: true,
-    max_length: 50,
+    unique: true,
+    validate: {
+      validator: function (v) {
+        return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          v
+        );
+      },
+    },
   },
   friends: [friendSchema],
   thoughts: [thoughtSchema],
-
-  toJSON: {
-    getters: true,
-  },
 });
 
 const User = model("user", userSchema);

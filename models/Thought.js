@@ -2,20 +2,43 @@ const { Schema, model } = require("mongoose");
 
 const thoughtSchema = new Schema(
   {
-    content: {
+    thoughtText: {
       type: String,
-      posted: { type: Date, default: Date.now },
+      required: true,
+      minlength: 1,
+      maxlength: 280,
     },
-    students: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Student",
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      // need a getter method
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    reactions: [{
+      reactionId: ,
+      reactionBody: {
+        type: String,
+        required: true,
+        maxlength: 280,
       },
-    ],
+    username: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      // need getter method
+    },
+    }],
   },
   {
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     id: false,
   }
