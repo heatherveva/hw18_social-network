@@ -1,6 +1,6 @@
 const { Thought, User } = require("../models");
 
-module.exports = {
+const thoughtController = {
   // Get all thoughts
   getThoughts(req, res) {
     Thought.find()
@@ -8,7 +8,7 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Get a thought
-  getSingleThought(req, res) {
+  getOneThought(req, res) {
     Thought.findOne({ _id: req.params.thoughtId })
       .select("-__v")
       .then((thought) =>
@@ -21,7 +21,14 @@ module.exports = {
   // Create a thought
   createThought(req, res) {
     Thought.create(req.body)
-      .then((thought) => res.json(thought))
+      .then((thought) => {
+        return User.findOneAndUpdate(
+          { _id: req.body.userId },
+          { $push: { thoughts: thought._id } },
+          { new: true }
+        );
+      })
+      .then((user) => res.json(user))
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
@@ -33,7 +40,7 @@ module.exports = {
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: "No thought with that ID" })
-          : Student.deleteMany({ _id: { $in: thought.students } })
+          : User.deleteMany({ _id: { $in: thought.users } })
       )
       .then(() => res.json({ message: "Thought and students deleted!" }))
       .catch((err) => res.status(500).json(err));
@@ -52,4 +59,28 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+
+  // //REACTIONS
+
+  //   // Create a reaction
+  //   createReaction(req, res) {
+  //     Thought.findOneAndUpdate(req.body)
+  //       .then((reaction) => res.json(reaction))
+  //       .catch((err) => {
+  //         console.log(err);
+  //         return res.status(500).json(err);
+  //       });
+
+  //   // Delete a reaction
+  //   deleteReaction(req, res) {
+  //     Reaction.findOneAndDelete({ _id: req.params.thoughtId })
+  //       .then((reaction) =>
+  //         !reaction
+  //           ? res.status(404).json({ message: "No thought with that ID" })
+  //           : User.deleteMany({ _id: { $in: reaction.users } })
+  //       )
+  //       .then(() => res.json({ message: "Reaction and user deleted!" }))
+  //       .catch((err) => res.status(500).json(err));
+  //   }
 };
+module.exports = thoughtController;

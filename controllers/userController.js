@@ -35,7 +35,6 @@ module.exports = {
       .then(async (users) => {
         const userObj = {
           users,
-          headCount: await headCount(),
         };
         return res.json(userObj);
       })
@@ -70,20 +69,20 @@ module.exports = {
   },
   // Delete a user
   deleteUser(req, res) {
-    User.findOneAndRemove({ _id: req.params.userId })
+    User.findOneAndDelete({ _id: req.params.userId })
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No such user exists" })
-          : Course.findOneAndUpdate(
+          : Thought.findOneAndUpdate(
               { users: req.params.userId },
               { $pull: { users: req.params.userId } },
               { new: true }
             )
       )
-      .then((course) =>
-        !course
+      .then((thought) =>
+        !thought
           ? res.status(404).json({
-              message: "User deleted, but no courses found",
+              message: "User deleted, but no thoughts found",
             })
           : res.json({ message: "User successfully deleted" })
       )
@@ -94,7 +93,7 @@ module.exports = {
   },
   // Update a user
   updateSingleUser(req, res) {
-    User.updateOne({ _id: req.params.userId })
+    User.findOneAndUpdate({ _id: req.params.userId })
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No such user exists" })
@@ -111,13 +110,13 @@ module.exports = {
   },
 
   // Add friend to a user
-  addAssignment(req, res) {
-    console.log("You are adding an assignment");
+  addFriend(req, res) {
+    console.log("You are adding an friend");
     console.log(req.body);
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { assignments: req.body } },
-      { runValidators: true, new: true }
+      { $addToSet: { friends: req.params.friendId } },
+      { new: true }
     )
       .then((user) =>
         !user
@@ -127,10 +126,10 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Remove friend from a user
-  removeAssignment(req, res) {
+  removeFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
+      { $pull: { friend: { friendId: req.params.friendId } } },
       { runValidators: true, new: true }
     )
       .then((user) =>
