@@ -19,7 +19,7 @@ router
   .put(updateSingleUser)
   .delete(deleteUser);
 
-// // /api/students/:studentId/assignments/:assignmentId
+// // /api/user/userId/friends/friendId
 router.route("/:userId/friends/:friendId").post(addFriend).delete(removeFriend);
 
 module.exports = router;

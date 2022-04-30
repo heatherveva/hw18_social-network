@@ -2,32 +2,6 @@
 const { ObjectId } = require("mongoose").Types;
 const { User, Thought } = require("../models");
 
-// // Aggregate function to get the number of users overall
-// const headCount = async () =>
-//   User.aggregate()
-//     // Your code here
-//     .count("userCount")
-//     .then((numberOfUsers) => numberOfUsers);
-
-// // Execute the aggregate method on the User model and calculate the overall grade by using the $avg operator
-// const grade = async (userId) =>
-//   User.aggregate([
-//     // Include only the user who can match the given ObjectId using the $match operator
-//     {
-//       $match: { _id: ObjectId(userId) },
-//     },
-//     {
-//       $unwind: "$assignments",
-//     },
-//     // Group information for the user with the given ObjectId alongside an overall grade calculated using the $avg operator
-//     {
-//       $group: {
-//         _id: ObjectId(userId),
-//         overallGrade: { $avg: "$assignments.score" },
-//       },
-//     },
-//   ]);
-
 module.exports = {
   // Get all users
   getUsers(req, res) {
@@ -123,13 +97,13 @@ module.exports = {
   removeFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { friends: { friendId: req.params.friendId } } },
+      { $pull: { friends: req.params.friendId } },
       { new: true }
     )
       .then((user) =>
         !user
-          ? res.status(404).json({ message: "No user found with that ID :(" })
-          : res.json(user)
+          ? res.status(404).json({ message: "No user found with that ID" })
+          : User.findOneAndUpdate({ _id: req.params.friendId })
       )
       .catch((err) => res.status(500).json(err));
   },
