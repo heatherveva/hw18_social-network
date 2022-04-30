@@ -1,4 +1,4 @@
-const { Thought, User } = require("../models");
+const { Thought, User, Reaction } = require("../models");
 
 const thoughtController = {
   // Get all thoughts
@@ -76,7 +76,7 @@ const thoughtController = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  //   // Delete a reaction
+  // Delete a reaction
   deleteReaction(req, res) {
     console.log("You are removing a reaction");
     Thought.findOneAndUpdate(

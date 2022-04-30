@@ -8,12 +8,6 @@
 
 This application requires Express.js for routing, a MongoDB database, and the Mongoose ODM.
 
-This application was deployed to Heroku.
-
-## Screenshot
-
-[![This is a screenshot of the Tech Talk homepage. The title is dark green and located in the left corner, while the existing blog posts are displayed below.](./public/images/techtalk.png)](./public/images/techtalk.png)
-
 ## License
 
 This application is covered under an MIT License.
@@ -26,8 +20,11 @@ Email: heatherveva@gmail.com
 
 ## Links
 
-GitHub Repository:
+GitHub Repository: https://github.com/heatherveva/hw18_social-network.git
 
-GitHub Page:
+GitHub Page: https://heatherveva.github.io/hw18_social-network/
 
-Walthrough:
+Walthrough:  
+USER ROUTES: https://www.loom.com/share/a74a8a3d980b48ceb6ef605b7575856b
+THOUGHT ROUTES: https://www.loom.com/share/17519f9f32b94f66940e1909b852a46f
+REACTION ROUTES:

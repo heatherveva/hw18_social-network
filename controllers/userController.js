@@ -51,10 +51,7 @@ module.exports = {
       .then(async (user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
-          : res.json({
-              user,
-              grade: await grade(req.params.userId),
-            })
+          : res.json({ user })
       )
       .catch((err) => {
         console.log(err);
@@ -93,20 +90,17 @@ module.exports = {
   },
   // Update a user
   updateSingleUser(req, res) {
-    User.findOneAndUpdate({ _id: req.params.userId })
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    )
       .then((user) =>
         !user
-          ? res.status(404).json({ message: "No such user exists" })
-          : Course.findOneAndUpdate(
-              { users: req.params.userId },
-              { $pull: { users: req.params.userId } },
-              { new: true }
-            )
+          ? res.status(404).json({ message: "No user with this id!" })
+          : res.json(user)
       )
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+      .catch((err) => res.status(500).json(err));
   },
 
   // Add friend to a user
